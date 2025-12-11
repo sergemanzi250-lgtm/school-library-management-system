@@ -25,7 +25,8 @@ npx prisma generate
 Write-Host "Setting up database..." -ForegroundColor Yellow
 try {
     npx prisma migrate dev --name init
-} catch {
+}
+catch {
     Write-Host "Database already initialized" -ForegroundColor Gray
 }
 
@@ -33,7 +34,8 @@ try {
 Write-Host "Seeding database..." -ForegroundColor Yellow
 try {
     npx ts-node scripts/seed.ts
-} catch {
+}
+catch {
     Write-Host "Database already seeded" -ForegroundColor Gray
 }
 

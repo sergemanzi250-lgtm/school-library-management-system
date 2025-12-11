@@ -139,10 +139,10 @@ export default function BookDetailsPage() {
                                             <td className="px-4 py-2">
                                                 <span
                                                     className={`px-2 py-1 rounded text-white text-xs font-semibold ${trans.status === 'RETURNED'
-                                                            ? 'bg-green-600'
-                                                            : trans.status === 'OVERDUE'
-                                                                ? 'bg-red-600'
-                                                                : 'bg-blue-600'
+                                                        ? 'bg-green-600'
+                                                        : trans.status === 'OVERDUE'
+                                                            ? 'bg-red-600'
+                                                            : 'bg-blue-600'
                                                         }`}
                                                 >
                                                     {trans.status}

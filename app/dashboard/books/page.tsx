@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, Button, Input, Modal } from '@/components/ui'
 import { Layout } from '@/components/Layout'
+import { Providers } from '@/app/providers'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,7 +17,7 @@ interface Book {
   available: number
 }
 
-export default function BooksPage() {
+function BooksContent() {
   const [books, setBooks] = useState<Book[]>([])
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -179,5 +180,13 @@ export default function BooksPage() {
         </Modal>
       </div>
     </Layout>
+  )
+}
+
+export default function BooksPage() {
+  return (
+    <Providers>
+      <BooksContent />
+    </Providers>
   )
 }

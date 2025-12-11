@@ -3,18 +3,18 @@ import { ReactNode } from 'react'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'School Library Management System',
-  description: 'Manage books, borrowing, and reservations',
+    title: 'School Library Management System',
+    description: 'Manage books, borrowing, and reservations',
 }
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: ReactNode
+    children: ReactNode
 }) {
-  return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
-  )
+    return (
+        <html lang="en">
+            <body>{children}</body>
+        </html>
+    )
 }

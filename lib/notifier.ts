@@ -4,63 +4,63 @@ import twilio from 'twilio'
 let twilioClient: ReturnType<typeof twilio> | null = null
 
 function getTwilioClient() {
-  if (!twilioClient && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
-    twilioClient = twilio(
-      process.env.TWILIO_ACCOUNT_SID,
-      process.env.TWILIO_AUTH_TOKEN
-    )
-  }
-  return twilioClient
+    if (!twilioClient && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+        twilioClient = twilio(
+            process.env.TWILIO_ACCOUNT_SID,
+            process.env.TWILIO_AUTH_TOKEN
+        )
+    }
+    return twilioClient
 }
 
 export type NotificationType = 'email' | 'sms' | 'both'
 
 export async function sendNotification(
-  recipient: string,
-  type: NotificationType,
-  subject: string,
-  message: string
+    recipient: string,
+    type: NotificationType,
+    subject: string,
+    message: string
 ) {
-  const results = []
+    const results = []
 
-  if (type === 'email' || type === 'both') {
-    try {
-      const emailResult = await sendEmail(recipient, subject, message)
-      results.push({ type: 'email', status: 'sent', result: emailResult })
-    } catch (error) {
-      results.push({ type: 'email', status: 'failed', error })
+    if (type === 'email' || type === 'both') {
+        try {
+            const emailResult = await sendEmail(recipient, subject, message)
+            results.push({ type: 'email', status: 'sent', result: emailResult })
+        } catch (error) {
+            results.push({ type: 'email', status: 'failed', error })
+        }
     }
-  }
 
-  if (type === 'sms' || type === 'both') {
-    try {
-      const client = getTwilioClient()
-      if (!client) {
-        throw new Error('Twilio not configured')
-      }
-      const smsResult = await client.messages.create({
-        body: message,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: recipient,
-      })
-      results.push({ type: 'sms', status: 'sent', result: smsResult })
-    } catch (error) {
-      results.push({ type: 'sms', status: 'failed', error })
+    if (type === 'sms' || type === 'both') {
+        try {
+            const client = getTwilioClient()
+            if (!client) {
+                throw new Error('Twilio not configured')
+            }
+            const smsResult = await client.messages.create({
+                body: message,
+                from: process.env.TWILIO_PHONE_NUMBER,
+                to: recipient,
+            })
+            results.push({ type: 'sms', status: 'sent', result: smsResult })
+        } catch (error) {
+            results.push({ type: 'sms', status: 'failed', error })
+        }
     }
-  }
 
-  return results
+    return results
 }
 
 export async function sendBorrowConfirmation(
-  email: string,
-  phone: string | null,
-  studentName: string,
-  bookTitle: string,
-  dueDate: string,
-  notificationType: NotificationType = 'email'
+    email: string,
+    phone: string | null,
+    studentName: string,
+    bookTitle: string,
+    dueDate: string,
+    notificationType: NotificationType = 'email'
 ) {
-  const emailMessage = `
+    const emailMessage = `
     <h2>Borrow Confirmation</h2>
     <p>Dear ${studentName},</p>
     <p>You have successfully borrowed <strong>${bookTitle}</strong>.</p>
@@ -68,11 +68,11 @@ export async function sendBorrowConfirmation(
     <p>Please return it on time.</p>
   `
 
-  const smsMessage = `Hello ${studentName}, you borrowed "${bookTitle}" from our library. Due date: ${dueDate}`
+    const smsMessage = `Hello ${studentName}, you borrowed "${bookTitle}" from our library. Due date: ${dueDate}`
 
-  if (notificationType === 'both' && phone) {
-    return sendNotification(phone, 'both', 'Book Borrowed', smsMessage)
-  }
+    if (notificationType === 'both' && phone) {
+        return sendNotification(phone, 'both', 'Book Borrowed', smsMessage)
+    }
 
-  return sendNotification(email, notificationType, 'Book Borrowed', emailMessage)
+    return sendNotification(email, notificationType, 'Book Borrowed', emailMessage)
 }
