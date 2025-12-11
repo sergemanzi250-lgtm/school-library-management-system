@@ -4,10 +4,10 @@ import twilio from 'twilio'
 let twilioClient: ReturnType<typeof twilio> | null = null
 
 function getTwilioClient() {
-    if (!twilioClient && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+    if (!twilioClient && process.env.TWILIO_SID && process.env.TWILIO_TOKEN) {
         twilioClient = twilio(
-            process.env.TWILIO_ACCOUNT_SID,
-            process.env.TWILIO_AUTH_TOKEN
+            process.env.TWILIO_SID,
+            process.env.TWILIO_TOKEN
         )
     }
     return twilioClient
@@ -40,7 +40,7 @@ export async function sendNotification(
             }
             const smsResult = await client.messages.create({
                 body: message,
-                from: process.env.TWILIO_PHONE_NUMBER,
+                from: process.env.TWILIO_FROM,
                 to: recipient,
             })
             results.push({ type: 'sms', status: 'sent', result: smsResult })
