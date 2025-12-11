@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Card, Button, Input, Modal } from '@/components/ui'
 import { Layout } from '@/components/Layout'
 
+export const dynamic = 'force-dynamic'
+
 interface User {
   id: string
   email: string

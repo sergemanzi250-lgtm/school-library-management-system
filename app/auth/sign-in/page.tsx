@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { Providers } from '@/app/providers'
 import { Input, Button, Card } from '@/components/ui'
 import { Layout } from '@/components/Layout'
 
-export default function SignIn() {
+function SignInContent() {
   const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -85,5 +86,13 @@ export default function SignIn() {
         </Card>
       </div>
     </Layout>
+  )
+}
+
+export default function SignIn() {
+  return (
+    <Providers>
+      <SignInContent />
+    </Providers>
   )
 }

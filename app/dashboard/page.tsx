@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { Providers } from '@/app/providers'
 import { Card, Button } from '@/components/ui'
 import { Layout } from '@/components/Layout'
+
+export const dynamic = 'force-dynamic'
 
 interface DashboardStats {
   totalBooks: number
@@ -13,7 +16,7 @@ interface DashboardStats {
   overdueBooks: number
 }
 
-export default function Dashboard() {
+function DashboardContent() {
   const { data: session } = useSession()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -119,7 +122,7 @@ export default function Dashboard() {
               <Card>
                 <h2 className="text-xl font-semibold mb-4">Information</h2>
                 <p className="text-gray-600 text-sm mb-4">
-                  Use the dashboard to manage your library's books, users, and
+                  Use the dashboard to manage your library&apos;s books, users, and
                   transactions. Monitor borrowing trends and send notifications
                   to users.
                 </p>
@@ -132,5 +135,13 @@ export default function Dashboard() {
         )}
       </div>
     </Layout>
+  )
+}
+
+export default function Dashboard() {
+  return (
+    <Providers>
+      <DashboardContent />
+    </Providers>
   )
 }

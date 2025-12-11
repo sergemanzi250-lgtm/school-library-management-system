@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { Providers } from './providers'
 import { Layout } from '@/components/Layout'
 import { BookCard } from '@/components/BookCard'
 import { Card } from '@/components/ui'
@@ -15,7 +16,7 @@ interface Book {
   quantity: number
 }
 
-export default function Home() {
+function PageContent() {
   const { data: session } = useSession()
   const [books, setBooks] = useState<Book[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,7 +49,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bookId,
-          userId: session.user?.id,
+          userId: (session.user as any)?.id,
           dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
         }),
       })
@@ -117,5 +118,13 @@ export default function Home() {
         )}
       </div>
     </Layout>
+  )
+}
+
+export default function Home() {
+  return (
+    <Providers>
+      <PageContent />
+    </Providers>
   )
 }

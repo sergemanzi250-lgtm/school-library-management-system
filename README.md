@@ -25,9 +25,10 @@ A comprehensive full-stack web application for managing a school library's book 
 ## 📦 Prerequisites
 
 - Node.js 18+ and npm
-- PostgreSQL database
-- Resend API key (for email notifications)
-- Twilio credentials (for SMS notifications, optional)
+- SQLite (included with Node.js, or built-in)
+- *Optional: PostgreSQL for production deployment*
+- *Optional: Resend API key for email notifications*
+- *Optional: Twilio credentials for SMS notifications*
 
 ## 🚀 Quick Start
 
@@ -37,28 +38,21 @@ A comprehensive full-stack web application for managing a school library's book 
 npm install
 ```
 
-### 2. Configure Environment
+### 2. Set Up Database (Automatic)
 
-Copy `.env.example` to `.env.local` and fill in your values:
+The project uses SQLite by default - no database installation needed! The database will be created automatically.
 
-```bash
-cp .env.example .env.local
-```
-
-Update the `.env.local` file with:
-- Database URL: `postgresql://user:password@localhost:5432/school_library`
-- NextAuth Secret: Generate with `openssl rand -base64 32`
-- Resend API Key (optional)
-- Twilio credentials (optional)
-
-### 3. Set Up Database
+### 3. Run Migrations and Seed Data
 
 ```bash
-# Run migrations
-npx prisma migrate dev
+# On Windows (PowerShell)
+$env:DATABASE_URL="file:./dev.db"
+$env:NEXTAUTH_SECRET="test-secret-key"
+npx prisma migrate dev --name init
+npx ts-node scripts/seed.ts
 
-# Seed sample data
-npm run db:seed
+# Or use the startup script (Windows)
+.\start.ps1
 ```
 
 ### 4. Start Development Server

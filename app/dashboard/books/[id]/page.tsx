@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'next/navigation'
-import { Card, Button } from '@/components/ui'
+import { Card } from '@/components/ui'
 import { Layout } from '@/components/Layout'
+
+export const dynamic = 'force-dynamic'
 
 interface Book {
     id: string
@@ -33,11 +35,7 @@ export default function BookDetailsPage() {
     const [transactions, setTransactions] = useState<Transaction[]>([])
     const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        fetchBookDetails()
-    }, [bookId])
-
-    const fetchBookDetails = async () => {
+    const fetchBookDetails = useCallback(async () => {
         try {
             const [bookRes, transRes] = await Promise.all([
                 fetch(`/api/books/${bookId}`),
@@ -58,7 +56,11 @@ export default function BookDetailsPage() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [bookId])
+
+    useEffect(() => {
+        fetchBookDetails()
+    }, [fetchBookDetails])
 
     if (loading) return <Layout><p>Loading...</p></Layout>
 

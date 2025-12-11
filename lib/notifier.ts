@@ -1,10 +1,17 @@
 import { sendEmail } from './mailer'
 import twilio from 'twilio'
 
-const twilioClient = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-)
+let twilioClient: ReturnType<typeof twilio> | null = null
+
+function getTwilioClient() {
+  if (!twilioClient && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+    twilioClient = twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    )
+  }
+  return twilioClient
+}
 
 export type NotificationType = 'email' | 'sms' | 'both'
 
@@ -27,7 +34,11 @@ export async function sendNotification(
 
   if (type === 'sms' || type === 'both') {
     try {
-      const smsResult = await twilioClient.messages.create({
+      const client = getTwilioClient()
+      if (!client) {
+        throw new Error('Twilio not configured')
+      }
+      const smsResult = await client.messages.create({
         body: message,
         from: process.env.TWILIO_PHONE_NUMBER,
         to: recipient,
