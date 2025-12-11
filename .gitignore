@@ -1,0 +1,11 @@
+.env.local
+.env
+node_modules
+.next
+dist
+build
+*.log
+.DS_Store
+.idea
+.vscode/*.json
+!.vscode/extensions.json
